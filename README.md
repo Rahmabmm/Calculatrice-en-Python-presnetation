@@ -27,3 +27,6 @@ It supports basic arithmetic operations, scientific functions, powers, and more.
   - `√49 = 7`
   - `5 xʸ 3 = 125`
   - `sin(90) = 1`
+
+![Calculator Demo](1.gif)
+
