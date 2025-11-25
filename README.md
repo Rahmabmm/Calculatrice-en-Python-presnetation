@@ -17,6 +17,11 @@ It supports basic arithmetic operations, scientific functions, powers, and more.
 - Percentage: `%`
 - Clear all: `AC`
 
+Here’s a small snippet showing how the calculator is launched:
+<p align="center">
+  <img src="1.gif" alt="Code">
+</p>
+
 ## Usage Instructions
 
 - Use the buttons to input numbers and operators.
@@ -27,6 +32,8 @@ It supports basic arithmetic operations, scientific functions, powers, and more.
   - `√49 = 7`
   - `5 xʸ 3 = 125`
   - `sin(90) = 1`
-
-![Calculator Demo](1.gif)
+  
+<p align="center">
+  <img src="2.gif" alt="Calculator UI">
+</p>
 
