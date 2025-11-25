@@ -17,3 +17,13 @@ It supports basic arithmetic operations, scientific functions, powers, and more.
 - Percentage: `%`
 - Clear all: `AC`
 
+## Usage Instructions
+
+- Use the buttons to input numbers and operators.
+- Click `=` to get results.
+- Use scientific functions for advanced calculations.
+- Example calculations:
+  - `7 × 8 = 56`
+  - `√49 = 7`
+  - `5 xʸ 3 = 125`
+  - `sin(90) = 1`
