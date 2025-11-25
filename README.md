@@ -9,11 +9,11 @@ It supports basic arithmetic operations, scientific functions, powers, and more.
 - Scientific functions:
   - Trigonometry: `sin`, `cos`, `tan` (degrees)
   - Logarithms: `log` (base 10), `exp`, `π`
-  - Powers: `x²`, `10ˣ`, `xʸ`
-  - Square root: `√`
+  - Powers: `x²`, `xʸ`
+  - Square root: `sqrt`
   - Factorial: `x!`
   - Reciprocal: `1/x`
 - Toggle positive/negative: `+/-`
 - Percentage: `%`
 - Clear all: `AC`
-- Professional GUI inspired by Windows Calculator (dark theme)
+
