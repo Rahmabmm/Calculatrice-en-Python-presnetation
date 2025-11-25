@@ -14,13 +14,14 @@ class Calculator:
         self.sci_bg = "#333333"
         self.equal_bg = "#0184FE"
         self.text_color = "white"
-
         window.configure(bg=self.bg)
 
-        self.expression = ""
+        self.expression = ""        
+        self.current_input = ""      
+        self.operator_pending = False
 
         self.label = tk.Label(
-            window, text="0", font=("Segoe UI", 35),
+            window, text="0", font=("Segoe UI", 30),
             bg=self.display_bg, fg=self.text_color,
             anchor="e", padx=15
         )
@@ -30,7 +31,7 @@ class Calculator:
             ["sin", "cos", "tan", "log", "xʸ", "exp"],
             ["7", "8", "9", "÷", "sqrt", "1/x"],
             ["4", "5", "6", "×", "^2", "π"],
-            ["1", "2", "3", "-", "x!", "10ˣ"],
+            ["1", "2", "3", "-", "+", "x!"],
             ["0", ".", "AC", "+/-", "%", "="]
         ]
 
@@ -51,11 +52,12 @@ class Calculator:
                     command=lambda v=value: self.clicked(v)
                 )
 
-                if value in ["+", "-", "×", "÷"]:
+              
+                if value in ["+", "-", "×", "÷", "xʸ"]:
                     btn.configure(bg=self.op_bg)
                 elif value == "=":
                     btn.configure(bg=self.equal_bg)
-                elif value in ["sin", "cos", "tan", "log", "sqrt", "1/x", "x!", "xʸ", "10ˣ", "exp", "^2", "π"]:
+                elif value in ["sin", "cos", "tan", "log", "sqrt", "1/x", "x!", "10ˣ", "exp", "^2", "π"]:
                     btn.configure(bg=self.sci_bg)
                 elif value in ["AC", "+/-", "%"]:
                     btn.configure(bg=self.op_bg)
@@ -67,98 +69,134 @@ class Calculator:
         for i in range(6):
             self.window.columnconfigure(i, weight=1)
 
-    def update_display(self, text):
-        self.label.config(text=text)
+    def update_display(self):
+        if self.expression == "" and self.current_input == "":
+            display_text = "0"
+        else:
+            display_text = self.expression + self.current_input
+        self.label.config(text=display_text)
 
     def clicked(self, value):
-        text = self.label["text"]
+        text = self.current_input
 
         if value == "AC":
             self.expression = ""
-            self.update_display("0")
+            self.current_input = ""
+            self.operator_pending = False
+            self.update_display()
             return
 
         if value == "+/-":
             try:
-                self.update_display(str(-float(text)))
+                if text:
+                    self.current_input = str(-float(text))
+                else:
+                    self.current_input = "0"
             except:
-                self.update_display("Error")
+                self.current_input = "Error"
+            self.update_display()
             return
 
         if value == "%":
             try:
-                self.update_display(str(float(text) / 100))
+                if text:
+                    self.current_input = str(float(text)/100)
+                else:
+                    self.current_input = "0"
             except:
-                self.update_display("Error")
+                self.current_input = "Error"
+            self.update_display()
             return
 
         if value == "π":
-            self.update_display(str(math.pi))
+            self.current_input = str(math.pi)
+            self.update_display()
             return
 
         try:
-            num = float(text)
-
+            num = float(text) if text else 0
             if value == "sin":
-                self.update_display(str(math.sin(math.radians(num))))
+                self.current_input = str(math.sin(math.radians(num)))
+                self.update_display()
                 return
             if value == "cos":
-                self.update_display(str(math.cos(math.radians(num))))
+                self.current_input = str(math.cos(math.radians(num)))
+                self.update_display()
                 return
             if value == "tan":
-                self.update_display(str(math.tan(math.radians(num))))
+                self.current_input = str(math.tan(math.radians(num)))
+                self.update_display()
                 return
             if value == "log":
-                self.update_display(str(math.log10(num)))
+                self.current_input = str(math.log10(num))
+                self.update_display()
                 return
             if value == "sqrt":
-                self.update_display(str(math.sqrt(num)))
+                self.current_input = str(math.sqrt(num))
+                self.update_display()
                 return
             if value == "1/x":
-                self.update_display(str(1 / num))
+                self.current_input = str(1 / num)
+                self.update_display()
                 return
             if value == "x!":
-                self.update_display(str(math.factorial(int(num))))
+                self.current_input = str(math.factorial(int(num)))
+                self.update_display()
                 return
             if value == "^2":
-                self.update_display(str(num ** 2))
+                self.current_input = str(num ** 2)
+                self.update_display()
                 return
             if value == "10ˣ":
-                self.update_display(str(10 ** num))
+                self.current_input = str(10 ** num)
+                self.update_display()
                 return
             if value == "exp":
-                self.update_display(str(math.exp(num)))
+                self.current_input = str(math.exp(num))
+                self.update_display()
                 return
         except:
-            pass  
-
-        if value == "xʸ":
-            self.expression += text + "**"
-            self.update_display("0")
+            self.current_input = "Error"
+            self.update_display()
             return
 
-        if value in ["+", "-", "×", "÷"]:
-            op = value.replace("×", "*").replace("÷", "/")
-            self.expression += text + op
-            self.update_display("0")
+        if value in ["+", "-", "×", "÷", "xʸ"]:
+            if self.current_input == "" and self.expression:
+                # replace last operator
+                if self.expression[-1] in "+-*/**":
+                    self.expression = self.expression[:-1]
+            else:
+                if value == "xʸ":
+                    op = "**"
+                else:
+                    op = value.replace("×", "*").replace("÷", "/")
+                self.expression += self.current_input + op
+                self.current_input = ""
+            self.operator_pending = True
+            self.update_display()
             return
 
         if value == "=":
-            self.expression += text
+            self.expression += self.current_input
             try:
                 result = eval(self.expression)
-                self.update_display(str(result))
+                self.current_input = str(result)
+                self.expression = ""
             except:
-                self.update_display("Error")
-            self.expression = ""
+                self.current_input = "Error"
+                self.expression = ""
+            self.update_display()
+            self.operator_pending = False
             return
 
-        if text == "0" and value not in ["." ]:
-            self.update_display(value)
+        if text == "0" and value not in ["."]:
+            self.current_input = value
         else:
-            self.update_display(text + value)
-
+            self.current_input += value
+        self.operator_pending = False
+        self.update_display()
 
 window = tk.Tk()
 Calculator(window)
 window.mainloop()
+
